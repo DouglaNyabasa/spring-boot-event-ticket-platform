@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.doug</groupId>
-    <artifactId>eventTickentPlatform</artifactId>
+    <artifactId>eventTicketPlatform</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>eventTickentPlatform</name>
-    <description>eventTickentPlatform</description>
+    <name>eventTicketPlatform</name>
+    <description>eventTicketPlatform</description>
     <url/>
     <licenses>
         <license/>

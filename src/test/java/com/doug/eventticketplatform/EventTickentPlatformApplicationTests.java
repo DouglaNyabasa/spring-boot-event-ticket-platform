@@ -1,4 +1,4 @@
-package com.doug.eventtickentplatform;
+package com.doug.eventticketplatform;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
