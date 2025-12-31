@@ -1,0 +1,70 @@
+package com.doug.eventticketplatform.model;
+
+import com.doug.eventticketplatform.domain.EventStatus;
+import jakarta.persistence.*;
+import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "events")
+public class Event {
+    @Id
+    @Column(name = "id",updatable = false,nullable = false)
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
+    @Column(name = "title",nullable = false)
+    private String title;
+
+    @Column(name = "start_time")
+    private LocalDateTime startTime;
+    @Column(name = "end_time")
+    private LocalDateTime endTime;
+
+    @Column(name = "venue",nullable = false)
+    private String venue;
+
+    @Column(name = "sales_start_time")
+    private LocalDateTime salesStartTime;
+
+    @Column(name = "sales_end_time")
+    private LocalDateTime salesEndTime;
+
+    @Column(name = "status",nullable = false)
+    @Enumerated(EnumType.STRING)
+    private EventStatus status;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "organizer_id")
+    private User organizer;
+
+    @ManyToMany(mappedBy = "attendingEvents")
+    private List<User> attendees = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "staffingEvents")
+    private List<User> staff = new ArrayList<>();
+
+    @CreatedDate
+    @Column(name = "created_at",updatable = false,nullable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updated_at",nullable = false)
+    private LocalDateTime updatedAt;
+
+
+
+
+
+}
