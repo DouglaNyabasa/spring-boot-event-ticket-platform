@@ -9,6 +9,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Getter
@@ -67,7 +68,15 @@ public class Event {
     private LocalDateTime updatedAt;
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Event event = (Event) o;
+        return Objects.equals(id, event.id) && Objects.equals(title, event.title) && Objects.equals(startTime, event.startTime) && Objects.equals(endTime, event.endTime) && Objects.equals(venue, event.venue) && Objects.equals(salesStartTime, event.salesStartTime) && Objects.equals(salesEndTime, event.salesEndTime) && status == event.status && Objects.equals(createdAt, event.createdAt) && Objects.equals(updatedAt, event.updatedAt);
+    }
 
-
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, startTime, endTime, venue, salesStartTime, salesEndTime, status, createdAt, updatedAt);
+    }
 }
