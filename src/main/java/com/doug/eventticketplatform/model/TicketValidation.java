@@ -1,14 +1,14 @@
 package com.doug.eventticketplatform.model;
 
-import com.doug.eventticketplatform.domain.TicketStatus;
+
+import com.doug.eventticketplatform.domain.TicketValidationMethod;
+import com.doug.eventticketplatform.domain.TicketValidationStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -17,28 +17,25 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "tickets")
-public class Ticket {
+@Table(name = "ticket_validation")
+public class TicketValidation {
 
     @Id
-    @Column(name = "id", nullable = false,unique = true)
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", nullable = false, updatable = false)
     private UUID id;
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
-    private TicketStatus status;
+    private TicketValidationStatus status;
+
+    @Column(name = "validationMethod", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private TicketValidationMethod validationMethod;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ticket_type_id")
-    private TicketType ticketType;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "purchaser_id")
-    private User purchaser;
-
-    @OneToMany(mappedBy = "ticket",cascade = CascadeType.ALL)
-    private List<TicketValidation> validations = new ArrayList<>();
+    @JoinColumn(name = "ticket_id")
+    private Ticket ticket;
 
     @CreatedDate
     @Column(name = "created_at",updatable = false,nullable = false)
@@ -47,5 +44,4 @@ public class Ticket {
     @LastModifiedDate
     @Column(name = "updated_at",nullable = false)
     private LocalDateTime updatedAt;
-
 }
