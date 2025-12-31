@@ -1,14 +1,13 @@
 package com.doug.eventticketplatform.model;
 
-import com.doug.eventticketplatform.domain.TicketStatus;
+
+import com.doug.eventticketplatform.domain.QrCodeStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -17,31 +16,24 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "tickets")
-public class Ticket {
+@Table(name = "qr_codes")
+public class QrCode {
 
     @Id
-    @Column(name = "id", nullable = false,unique = true)
+    @Column(name = "id",updatable = false, nullable = false)
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "status", nullable = false)
+    @Column(name = "status",nullable = false)
     @Enumerated(EnumType.STRING)
-    private TicketStatus status;
+    private QrCodeStatus status;
+
+    @Column(name = "value",nullable = false)
+    private String value;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ticket_type_id")
-    private TicketType ticketType;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "purchaser_id")
-    private User purchaser;
-
-    @OneToMany(mappedBy = "ticket",cascade = CascadeType.ALL)
-    private List<QrCode> qrCodes = new ArrayList<>();
-
-    @OneToMany(mappedBy = "ticket",cascade = CascadeType.ALL)
-    private List<TicketValidation> validations = new ArrayList<>();
+    @JoinColumn(name = "ticket_id")
+    private Ticket ticket;
 
     @CreatedDate
     @Column(name = "created_at",updatable = false,nullable = false)
@@ -50,5 +42,6 @@ public class Ticket {
     @LastModifiedDate
     @Column(name = "updated_at",nullable = false)
     private LocalDateTime updatedAt;
+
 
 }
