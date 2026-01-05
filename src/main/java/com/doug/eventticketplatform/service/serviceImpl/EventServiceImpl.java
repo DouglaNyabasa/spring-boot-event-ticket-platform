@@ -4,6 +4,7 @@ import com.doug.eventticketplatform.Exceptions.UserNotFoundException;
 import com.doug.eventticketplatform.model.Event;
 import com.doug.eventticketplatform.model.TicketType;
 import com.doug.eventticketplatform.model.User;
+import com.doug.eventticketplatform.repository.EventRepository;
 import com.doug.eventticketplatform.repository.UserRepository;
 import com.doug.eventticketplatform.request.CreateEventRequest;
 import com.doug.eventticketplatform.service.EventService;
@@ -15,9 +16,11 @@ import java.util.UUID;
 public class EventServiceImpl implements EventService {
 
     private final UserRepository userRepository;
+    private final EventRepository eventRepository;
 
-    public EventServiceImpl(UserRepository userRepository) {
+    public EventServiceImpl(UserRepository userRepository, EventRepository eventRepository) {
         this.userRepository = userRepository;
+        this.eventRepository = eventRepository;
     }
 
 
@@ -49,8 +52,9 @@ public class EventServiceImpl implements EventService {
         eventToCreate.setStatus(event.getStatus());
         eventToCreate.setOrganizer(organizer);
         eventToCreate.setTicketTypes(ticketTypesToCreate);
+        return eventRepository.save(eventToCreate);
 
 
-        return null;
+
     }
 }
