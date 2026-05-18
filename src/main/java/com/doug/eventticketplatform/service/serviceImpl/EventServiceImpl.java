@@ -8,6 +8,8 @@ import com.doug.eventticketplatform.repository.EventRepository;
 import com.doug.eventticketplatform.repository.UserRepository;
 import com.doug.eventticketplatform.request.CreateEventRequest;
 import com.doug.eventticketplatform.service.EventService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,18 +33,19 @@ public class EventServiceImpl implements EventService {
                         String.format("User with id " + organizerId + " not found")
                 )
         );
-       List<TicketType> ticketTypesToCreate = event.getTicketTypes().stream().map(
+        Event eventToCreate = new Event();
+
+        List<TicketType> ticketTypesToCreate = event.getTicketTypes().stream().map(
              ticketType -> {
                  TicketType ticketTypeToCreate = new TicketType();
                  ticketTypeToCreate.setName(ticketType.getName());
                  ticketTypeToCreate.setPrice(ticketType.getPrice());
                  ticketTypeToCreate.setDescription(ticketType.getDescription());
                  ticketTypeToCreate.setTotalAvailable(ticketType.getTotalAvailable());
+                 ticketTypeToCreate.setEvent(eventToCreate);
                  return ticketTypeToCreate;
              }
         ).toList();
-
-        Event eventToCreate = new Event();
         eventToCreate.setName(event.getName());
         eventToCreate.setStartTime(event.getStartTime());
         eventToCreate.setEndTime(event.getEndTime());
@@ -56,5 +59,11 @@ public class EventServiceImpl implements EventService {
 
 
 
+    }
+
+    @Override
+    public Page<Event> listEventsForOrganizers(UUID organizerId, Pageable pageable) {
+
+        return  eventRepository.findByOrganizerId(organizerId,pageable);
     }
 }
